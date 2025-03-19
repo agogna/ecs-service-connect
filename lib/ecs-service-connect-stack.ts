@@ -52,7 +52,7 @@ export class EcsServiceConnectStack extends cdk.Stack {
       // include health check (default is none)
       healthCheck: {
         interval: cdk.Duration.seconds(60),
-        path: "/health",
+        path: "/",
         timeout: cdk.Duration.seconds(5),
       }
     });
