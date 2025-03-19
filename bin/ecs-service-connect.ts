@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import * as cdk from 'aws-cdk-lib';
-import { EcsServiceConnectStack } from '../lib/ecs-service-connect-stack';
+import { GreetingApplicationStack } from '../lib/greeting-application-stack';
 
 const app = new cdk.App();
-new EcsServiceConnectStack(app, 'EcsServiceConnectStack', {
+new GreetingApplicationStack(app, 'greeting-application', {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */
