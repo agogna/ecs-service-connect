@@ -16,7 +16,7 @@ export class EcsServiceConnectStack extends cdk.Stack {
       instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE3, ec2.InstanceSize.MICRO)
     });
 
-    cluster.addDefaultCloudMapNamespace({
+    var namespace = cluster.addDefaultCloudMapNamespace({
       name: 'local',
     });
 
@@ -49,6 +49,8 @@ export class EcsServiceConnectStack extends cdk.Stack {
         ],
       },
     });
+
+    service.node.addDependency(namespace);
 
     // Create ALB
     const lb = new elbv2.ApplicationLoadBalancer(this, 'LB', {
