@@ -16,6 +16,10 @@ export class EcsServiceConnectStack extends cdk.Stack {
       instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE3, ec2.InstanceSize.MICRO)
     });
 
+    cluster.addDefaultCloudMapNamespace({
+      name: 'local',
+    });
+
     // Create Task Definition
     const taskDefinition = new ecs.Ec2TaskDefinition(this, 'TaskDef');
     const container = taskDefinition.addContainer('web', {
@@ -26,13 +30,24 @@ export class EcsServiceConnectStack extends cdk.Stack {
     container.addPortMappings({
       containerPort: 80,
       hostPort: 8080,
-      protocol: ecs.Protocol.TCP
+      protocol: ecs.Protocol.TCP,
+      name: 'http',
+      appProtocol: ecs.AppProtocol.http
     });
 
     // Create Service
     const service = new ecs.Ec2Service(this, "Service", {
       cluster,
       taskDefinition,
+      serviceConnectConfiguration: {
+        services: [
+          {
+            portMappingName: 'http',
+            dnsName: 'web-http',
+            port: 80,
+          },
+        ],
+      },
     });
 
     // Create ALB
