@@ -7,16 +7,13 @@ interface NameStackProps extends cdk.StackProps {
 }
 
 export class NameStack extends cdk.NestedStack {
-    public readonly service: cdk.aws_ecs.FargateService;
+    public readonly service: cdk.aws_ecs.Ec2Service;
 
     constructor(scope: Construct, id: string, props: NameStackProps) {
         super(scope, id, props);
 
         // Create Task Definition
-        const taskDefinition = new ecs.FargateTaskDefinition(this, 'TaskDefinition', {
-            memoryLimitMiB: 512,
-            cpu: 256
-        });
+        const taskDefinition = new ecs.Ec2TaskDefinition(this, 'TaskDefinition', {});
 
         const container = taskDefinition.addContainer('name', {
             image: ecs.ContainerImage.fromRegistry("public.ecr.aws/ecs-sample-image/name-server"),
@@ -34,7 +31,7 @@ export class NameStack extends cdk.NestedStack {
         });
 
         // Create Service
-        this.service = new ecs.FargateService(this, "NameService", {
+        this.service = new ecs.Ec2Service(this, "NameService", {
             cluster: props.cluster,
             taskDefinition,
             cloudMapOptions: {

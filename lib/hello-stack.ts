@@ -13,10 +13,7 @@ export class HelloStack extends cdk.NestedStack {
         super(scope, id, props);
 
         // Create Task Definition
-        const taskDefinition = new ecs.FargateTaskDefinition(this, 'TaskDefinition', {
-            memoryLimitMiB: 512,
-            cpu: 256
-        });
+        const taskDefinition = new ecs.Ec2TaskDefinition(this, 'TaskDefinition', {});
 
         const container = taskDefinition.addContainer('hello', {
             image: ecs.ContainerImage.fromRegistry("public.ecr.aws/ecs-sample-image/hello-server:node"),
@@ -37,7 +34,7 @@ export class HelloStack extends cdk.NestedStack {
         });
 
         // Create Service
-        const loadBalancedFargateService = new ecsPatterns.ApplicationLoadBalancedFargateService(this, 'Service', {
+        const loadBalancedFargateService = new ecsPatterns.ApplicationLoadBalancedEc2Service(this, 'Service', {
             cluster: props.cluster,
             taskDefinition: taskDefinition,
             desiredCount: 2,
