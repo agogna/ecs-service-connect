@@ -23,6 +23,9 @@ export class GreetingApplicationStack extends cdk.Stack {
         useForServiceConnect: true
       }
     });
+    cluster.addCapacity('DefaultAutoScalingGroup', {
+      instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE3, ec2.InstanceSize.MEDIUM)
+    });
 
     const nameService = new NameStack(this, 'NameService', {
       ...props,
