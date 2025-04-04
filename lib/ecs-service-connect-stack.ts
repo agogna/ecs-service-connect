@@ -23,10 +23,13 @@ export class EcsServiceConnectStack extends cdk.Stack {
     });
 
     // Create Task Definition
-    const taskDefinition = new ecs.Ec2TaskDefinition(this, 'TaskDef');
+    const taskDefinition = new ecs.TaskDefinition(this, 'TaskDef',{
+      compatibility: ecs.Compatibility.EC2,
+      memoryMiB: (768+128).toString()
+    });
+
     const container = taskDefinition.addContainer('web', {
-      image: ecs.ContainerImage.fromRegistry("amazon/amazon-ecs-sample"),
-      memoryLimitMiB: 256,
+      image: ecs.ContainerImage.fromRegistry("amazon/amazon-ecs-sample")
     });
 
     container.addPortMappings({
