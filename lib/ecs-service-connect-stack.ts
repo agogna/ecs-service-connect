@@ -12,9 +12,11 @@ export class EcsServiceConnectStack extends cdk.Stack {
     const vpc = new ec2.Vpc(this, 'Vpc', { maxAzs: 2 });
 
     const cluster = new ecs.Cluster(this, 'EcsCluster', { vpc });
-    cluster.addCapacity('DefaultAutoScalingGroup', {
+    const asg = cluster.addCapacity('DefaultAutoScalingGroup', {
       instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE3, ec2.InstanceSize.MICRO)
     });
+    
+    asg.role.addManagedPolicy(cdk.aws_iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AmazonEC2ContainerServiceforEC2Role'));
 
     var namespace = cluster.addDefaultCloudMapNamespace({
       name: 'local',
